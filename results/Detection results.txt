@@ -1,0 +1,187 @@
+--------Image 2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1]--------
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z1.pk----
+Red: 7
+White: 8
+Red and white: 0
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z2.pk----
+Red: 38
+White: 16
+Red and white: 1
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z3.pk----
+Red: 66
+White: 16
+Red and white: 8
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z4.pk----
+Red: 78
+White: 33
+Red and white: 13
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z5.pk----
+Red: 100
+White: 27
+Red and white: 19
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z6.pk----
+Red: 90
+White: 35
+Red and white: 15
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z7.pk----
+Red: 80
+White: 20
+Red and white: 26
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z8.pk----
+Red: 73
+White: 23
+Red and white: 10
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z9.pk----
+Red: 24
+White: 22
+Red and white: 5
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z10.pk----
+Red: 12
+White: 19
+Red and white: 3
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z11.pk----
+Red: 7
+White: 11
+Red and white: 0
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z12.pk----
+Red: 3
+White: 5
+Red and white: 0
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z13.pk----
+Red: 4
+White: 5
+Red and white: 0
+
+--------Image 2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2]--------
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2] Z1.pk----
+Red: 89
+White: 20
+Red and white: 13
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2] Z2.pk----
+Red: 85
+White: 11
+Red and white: 14
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2] Z3.pk----
+Red: 90
+White: 10
+Red and white: 22
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2] Z4.pk----
+Red: 72
+White: 16
+Red and white: 10
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2] Z5.pk----
+Red: 48
+White: 3
+Red and white: 4
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 2] Z6.pk----
+Red: 17
+White: 0
+Red and white: 0
+
+--------Image 2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1]--------
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z1.pk----
+Red: 5
+White: 15
+Red and white: 1
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z2.pk----
+Red: 12
+White: 25
+Red and white: 1
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z3.pk----
+Red: 34
+White: 75
+Red and white: 18
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z4.pk----
+Red: 15
+White: 128
+Red and white: 51
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z5.pk----
+Red: 22
+White: 146
+Red and white: 58
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z6.pk----
+Red: 15
+White: 142
+Red and white: 90
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z7.pk----
+Red: 15
+White: 163
+Red and white: 62
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z8.pk----
+Red: 17
+White: 163
+Red and white: 70
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z9.pk----
+Red: 21
+White: 132
+Red and white: 38
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z10.pk----
+Red: 13
+White: 119
+Red and white: 33
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z11.pk----
+Red: 9
+White: 122
+Red and white: 25
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z12.pk----
+Red: 7
+White: 104
+Red and white: 23
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z13.pk----
+Red: 6
+White: 74
+Red and white: 16
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z14.pk----
+Red: 6
+White: 40
+Red and white: 6
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z15.pk----
+Red: 4
+White: 39
+Red and white: 7
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z16.pk----
+Red: 5
+White: 27
+Red and white: 3
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z17.pk----
+Red: 5
+White: 15
+Red and white: 1
+
+----2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1] Z18.pk----
+Red: 3
+White: 10
+Red and white: 1
