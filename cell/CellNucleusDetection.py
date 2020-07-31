@@ -6,9 +6,24 @@ Written by Stefano Gatti
 
 ------------------------------------------------------------
 
-Usage: run from command line with
-    python CellNucleusDetection.py train --dataset=../datasets/DatasetGeneChannels --weights=coco
-    or
+Usage: run from command line
+Parameters:
+        # General
+    command             ->  Either 'train' for the training, or 'test' for testing the network.
+        # Training
+    --dataset           ->  The folder of the dataset to use for training. Must be divided in 'train' and 'val' subfolders.
+    --weights           ->  The location of the .h5 file to load a previous model or 'coco' to use the COCO model.
+    --epochs            ->  The number of epochs to run training.
+    --logs              ->  The folder where logs will be saved. Defaults to ./logs.
+        # Testing
+    --image             ->  The image to run detection on during testing. Use this or '--dir'.
+    --dir               ->  The folder containing the images to run detection on during testing. Use this or '--image'.
+    --channel_number    ->  The number of channels of the input images. Defaults to 3.
+    --display_image     ->  Whether to display the result of testing ot not.
+Examples:
+        # Training
+    python CellNucleusDetection.py train --dataset=../datasets/DatasetGeneChannels --weights=../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5 --epochs=20
+        # Testing
     python CellNucleusDetection.py test --image="D:/Documents/Università/Atlas/Cell-Mask-RCNN/Mask_RCNN-master/DatasetRGBChannels/train/2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z6.jpg" --weights="../../../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5"
 """
 
@@ -163,11 +178,13 @@ def train(model, dataset, config, epochs):
     augmentation = iaa.Sequential([
         iaa.Fliplr(0.5),
         iaa.Flipud(0.5),
-        iaa.Rotate((-45, 45))
+        iaa.Rotate((-45, 45)),
+        iaa.ScaleX((0.7, 1.3)),
+        iaa.ScaleY((0.7, 1.3))
     ])
 
     # Finally, train the model
-    print("Training network heads")
+    print(f"\n----Beginning training----\n")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs=epochs,

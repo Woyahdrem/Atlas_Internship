@@ -2,26 +2,6 @@
 Configuration for the cell Mask R-CNN
 
 Written by Stefano Gatti
-
-------------------------------------------------------------
-
-Usage: import the module (see Jupyter notebooks for examples), or run from
-       the command line as such:
-
-    # Train a new model starting from pre-trained COCO weights
-    python3 cell.py train --dataset=/path/to/cell/dataset --weights=coco
-
-    # Train a new model starting from pre-trained COCO weights and using multiple masks per annotation
-    python3 cell.py train --dataset=/path/to/cell/dataset --weights=coco --class_mode=multiple_masks
-
-    # Train a new model starting from pre-trained COCO weights and using multiple masks per annotation
-    python3 cell.py train --dataset=/path/to/cell/dataset --weights=coco --input_channels=genes
-    
-    # Resume training a model that you had trained earlier
-    python3 cell.py train --dataset=/path/to/cell/dataset --weights=last
-    
-    # Train a new model starting from ImageNet weights
-    python3 cell.py train --dataset=/path/to/cell/dataset --weights=imagenet
 """
 
 import os

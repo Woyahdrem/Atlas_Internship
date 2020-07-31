@@ -6,8 +6,24 @@ Written by Stefano Gatti
 
 ------------------------------------------------------------
 
-Usage: run from command line with
-    python CellGeneDetection.py train --dataset=../datasets/DatasetGeneChannels --weights=coco
+Usage: run from command line
+Parameters:
+        # General
+    command             ->  Either 'train' for the training, or 'test' for testing the network.
+    --colour            ->  The colour to identify.
+        # Training
+    --dataset           ->  The folder of the dataset to use for training. Must be divided in 'train' and 'val' subfolders.
+    --weights           ->  The location of the .h5 file to load a previous model or 'coco' to use the COCO model.
+    --epochs            ->  The number of epochs to run training.
+    --logs              ->  The folder where logs will be saved. Defaults to ./logs.
+        # Testing
+    --image             ->  The image to run detection on during testing. Use this or '--dir'.
+    --dir               ->  The folder containing the images to run detection on during testing. Use this or '--image'.
+    --channel_number    ->  The number of channels of the input images. Defaults to 3.
+    --display_image     ->  Whether to display the result of testing ot not.
+Examples:
+        # Training
+    python CellGeneDetection.py train --dataset=../datasets/DatasetGeneChannels --weights=../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5 --epochs=20 --colour=red
     or
     python CellGeneDetection.py test --image="D:/Documents/Università/Atlas/Cell-Mask-RCNN/Mask_RCNN-master/DatasetRGBChannels/train/2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z6.jpg" --weights="../../../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5"
 """
@@ -96,10 +112,6 @@ class CellDatasetGenes(utils.Dataset):
             polygons = [r['shape_attributes'] for r in a['regions'] if
                         gene_colour in r["region_attributes"]["gene expression"]]
 
-            # Load the classes
-            classes = [r['region_attributes'] for r in a['regions'] if
-                       gene_colour in r["region_attributes"]["gene expression"]]
-
             # Next, we need to load the image path and the image size
             # if the dataset becomes too big, having the values directly in the json becomes necessary
             image_path = os.path.join(dataset_dir, a['filename'])
@@ -172,11 +184,13 @@ def train(model, dataset, config, epochs, colour):
     augmentation = iaa.Sequential([
         iaa.Fliplr(0.5),
         iaa.Flipud(0.5),
-        iaa.Rotate((-45, 45))
+        iaa.Rotate((-45, 45)),
+        iaa.ScaleX((0.7, 1.3)),
+        iaa.ScaleY((0.7, 1.3))
     ])
 
     # Finally, train the model
-    print("Training network heads")
+    print(f"\n----Beginning training----\n")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs=epochs,
@@ -335,7 +349,7 @@ if __name__ == '__main__':
 
     # Train or test
     if args.command == "train":
-        train(model=model, dataset=args.dataset, config=config, epochs=args.epochs, colorur=args.colour)
+        train(model=model, dataset=args.dataset, config=config, epochs=args.epochs, colour=args.colour)
     elif args.command == "test":
         # Load the image and corresponding ground truths
         if args.image:
