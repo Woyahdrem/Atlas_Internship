@@ -24,7 +24,7 @@ Examples:
         # Training
     python CellNucleusDetection.py train --dataset=../datasets/DatasetGeneChannels --weights=../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5 --epochs=20
         # Testing
-    python CellNucleusDetection.py test --image="D:/Documents/Università/Atlas/Cell-Mask-RCNN/Mask_RCNN-master/DatasetRGBChannels/train/2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z6.jpg" --weights="../../../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5"
+    python CellNucleusDetection.py test --dir="../datasets/DatasetGeneChannels/train" --weights="../models/nucleiSegmentation_all/mask_rcnn_cell_0020.h5"
 """
 
 # Generic imports
@@ -74,6 +74,13 @@ class CellConfigNuclei(CellConfigDefault):
     # Must have length equal to IMAGE_CHANNEL_COUNT
     # Values could depend on brightness of layer
     MEAN_PIXEL = np.array([123.7, 116.8, 103.9])
+
+    # Input image resizing
+    # IMAGE_MIN_DIM is the size of the scaled shortest side
+    # IMAGE_MAX_DIM is the maximum allowed size of the scaled longest side
+    # Due to the large number of nuclei, the image must be heavily downscaled
+    IMAGE_MIN_DIM = 1024
+    IMAGE_MAX_DIM = 1024
 
 
 ############################################################
@@ -179,8 +186,8 @@ def train(model, dataset, config, epochs):
         iaa.Fliplr(0.5),
         iaa.Flipud(0.5),
         iaa.Rotate((-45, 45)),
-        iaa.ScaleX((0.7, 1.3)),
-        iaa.ScaleY((0.7, 1.3))
+        iaa.ScaleX((0.8, 1.2)),
+        iaa.ScaleY((0.8, 1.2))
     ])
 
     # Finally, train the model
@@ -232,7 +239,7 @@ def test(model, images_path, targets, do_display):
 
         # Display the results
         if do_display:
-            image = skimage.io.imread(re.sub(r"/DatasetCellChannels/", "/DatasetRGBChannels/", image_path))
+            image = skimage.io.imread(re.sub(r"/DatasetGeneChannels/", "/DatasetRGBChannels/", image_path))
             colours = []
             for _ in r['class_ids']:
                 colours.append((0., .5, 1.))
@@ -359,6 +366,7 @@ if __name__ == '__main__':
             images = [args.image]
         else:
             # Load the annotation file
+            dir = args.dir
             print(f"\tLoading images from the folder {dir}")
             a = json.load(open(os.path.join(dir, "via_mask_annotations_json.json")))
             a = list(a.values())

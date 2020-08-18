@@ -25,7 +25,8 @@ Examples:
         # Training
     python CellGeneDetection.py train --dataset=../datasets/DatasetGeneChannels --weights=../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5 --epochs=20 --colour=red
     or
-    python CellGeneDetection.py test --image="D:/Documents/Università/Atlas/Cell-Mask-RCNN/Mask_RCNN-master/DatasetRGBChannels/train/2019-04-03_RNAScope PAF OCT D380.lif [PAF OCT D380 FOXJ1 CFTR 1 1] Z6.jpg" --weights="../../../models/cellSegmentation_RPN_only/mask_rcnn_cell_0010.h5"
+        # Testing Red
+    python CellGeneDetection.py test --weights="../models/nucleiSegmentation_all/mask_rcnn_cell_0020.h5" --dir="../datasets/DatasetGeneChannels/train" --colour=Red
 """
 
 # Generic imports
@@ -80,6 +81,13 @@ class CellConfigGenes(CellConfigDefault):
     # Must have length equal to IMAGE_CHANNEL_COUNT
     # Values could depend on brightness of layer
     MEAN_PIXEL = np.array([123.7, 116.8, 103.9])
+
+    # Input image resizing
+    # IMAGE_MIN_DIM is the size of the scaled shortest side
+    # IMAGE_MAX_DIM is the maximum allowed size of the scaled longest side
+    # Due to the large number of nuclei, the image must be heavily downscaled
+    IMAGE_MIN_DIM = 512
+    IMAGE_MAX_DIM = 512
 
 ############################################################
 #  Dataset
@@ -185,8 +193,8 @@ def train(model, dataset, config, epochs, colour):
         iaa.Fliplr(0.5),
         iaa.Flipud(0.5),
         iaa.Rotate((-45, 45)),
-        iaa.ScaleX((0.7, 1.3)),
-        iaa.ScaleY((0.7, 1.3))
+        iaa.ScaleX((0.8, 1.2)),
+        iaa.ScaleY((0.8, 1.2))
     ])
 
     # Finally, train the model
@@ -238,7 +246,7 @@ def test(model, images_path, targets, colour, do_display):
 
         # Display the results
         if do_display:
-            image = skimage.io.imread(re.sub(r"/DatasetCellChannels/", "/DatasetRGBChannels/", image_path))
+            image = skimage.io.imread(re.sub(r"/DatasetGeneChannels/", "/DatasetRGBChannels/", image_path))
             colours = []
             for _ in r['class_ids']:
                 colours.append(COLOURS[colour])
@@ -368,6 +376,7 @@ if __name__ == '__main__':
             images = [args.image]
         else:
             # Load the annotation file
+            dir = args.dir
             print(f"\tLoading images from the folder {dir}")
             a = json.load(open(os.path.join(dir, "via_mask_annotations_json.json")))
             a = list(a.values())
@@ -379,7 +388,7 @@ if __name__ == '__main__':
 
             targets = []
             for file in a:
-                g = len(x for x in file["regions"] if args.colour in x["region_attributes"]["gene expression"])
+                g = len([x for x in file["regions"] if args.colour in x["region_attributes"]["gene expression"]])
                 targets.append(g)
 
         test(model=model, images_path=images, targets=targets, colour=args.colour, do_display=args.display_image)
