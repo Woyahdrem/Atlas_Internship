@@ -1,0 +1,22 @@
+Final results:
+        Score on avg_det_time: 15.417187229792276
+        Score on average_iou: 23.58864855287053
+		-
+        Score on nuclei_true_positive: 2603
+        Score on nuclei_false_positive: 9
+        Score on nuclei_false_negative: 972
+		-
+        Score on red_true_positive: 845
+        Score on red_false_positive: 88
+        Score on red_true_negative: 0
+        Score on red_false_negative: 326
+		-
+        Score on white_true_positive: 1188
+        Score on white_false_positive: 94
+        Score on white_true_negative: 0
+        Score on white_false_negative: 472
+		-
+        Score on red_and_white_true_positive: 472
+        Score on red_and_white_false_positive: 9
+        Score on red_and_white_true_negative: 0
+        Score on red_and_white_false_negative: 174

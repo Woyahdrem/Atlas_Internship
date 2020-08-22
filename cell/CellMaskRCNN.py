@@ -256,3 +256,221 @@ def train(model, dataset, config):
                 epochs=100,
                 layers=layers,
                 augmentation=augmentation)
+
+############################################################
+#  Test
+############################################################
+def test(model, images_path, targets):
+    t_r = 0
+    t_w = 0
+    t_rw = 0
+    t_all = 0
+    acc_r = 0
+    acc_w = 0
+    acc_rw = 0
+
+    for img_i, (image_path, target) in enumerate(zip(images_path, targets)):
+
+        # Run model detection
+        print(f"Running on {image_path}")
+        # Read image
+        input_image = skimage.io.imread(image_path)
+        image = skimage.io.imread(re.sub(r"/DatasetCellChannels/", "/DatasetRGBChannels/", image_path))
+        # Detect cells
+        r = model.detect([input_image], verbose=0)[0]
+        """
+        print(f"BBoxes: {r['rois']}\n\t{r['rois'].shape}\n\t{r['rois'].shape[0]}")
+        print(f"Masks: {r['masks']}\n\t{r['masks'].shape}")
+        print(f"Class Ids: {r['class_ids'].shape}\n\t{r['class_ids']}" +
+              f"\n\tRed cells: {len([x for x in r['class_ids'] if x==1 or x==3])}" +
+              f"\n\tWhite cells: {len([x for x in r['class_ids'] if x==2 or x==3])}")
+        """
+        print("----Counting classes----")
+        all_red = len([x for x in r['class_ids'] if x == 1 or x == 3])
+        all_white = len([x for x in r['class_ids'] if x == 2 or x == 3])
+        red_and_white = len([x for x in r['class_ids'] if x == 3])
+        cell_genes = len(r['class_ids'])
+        t_r += all_red
+        t_w += all_white
+        t_rw += red_and_white
+        t_all += cell_genes
+        if target[0] == 0:
+            if (all_red - red_and_white) == 0:
+                acc_r += 1
+            else:
+                acc_r += 0
+        else:
+            acc_r += min((all_red - red_and_white) / target[0], 1)
+        if target[1] == 0:
+            if (all_white - red_and_white) == 0:
+                acc_w += 1
+            else:
+                acc_w += 0
+        else:
+            acc_w += min((all_white - red_and_white) / target[1], 1)
+        if target[2] == 0:
+            if red_and_white == 0:
+                acc_rw += 1
+            else:
+                acc_rw += 0
+        else:
+            acc_rw += min(red_and_white / target[2], 1)
+
+        class_colors = {
+            1: (.9, .0, .0),  # Red
+            # 1: (.0, 1., 1.),  # Red but coloured as a negative
+
+            2: (1., 1., 1.),  # White
+            # 2: (.0, 1., 1.),  # White but coloured as a negative
+
+            3: (1., .5, .0),  # Red and white
+            # 3: (.9, .0, .0),  # Red and white but coloured red
+            # 3: (1., 1., 1.),  # Red and white but coloured white
+
+            4: (.0, 1., 1.)  # Negative
+        }
+        """
+        colors = []
+        for id in r["class_ids"]:
+            colors.append(class_colors[id])
+        viz.display_instances(image, boxes=r["rois"], masks=r["masks"], class_ids=r["class_ids"],
+                              class_names=["background", "", "", ""  "", "negative"],
+                              # class_names=["background", "red", "no red", "white", "no white"],
+                              colors=colors,
+                              figsize=(2048, 2048), show_bbox=False)
+        """
+
+    print(f"\n\n----Final report----")
+    print(f"\tTotal red detections: {t_r} ({50 * (acc_r + acc_rw) / len(targets)}% accuracy)\n"
+          f"\t\tExclusive red: {t_r - t_rw} ({100 * acc_r / len(targets)}% accuracy)")
+    print(f"\tTotal white detections: {t_w} ({50 * (acc_w + acc_rw) / len(targets)}% accuracy)\n"
+          f"\t\tExclusive white: {t_w - t_rw} ({100 * acc_w / len(targets)}% accuracy)")
+    print(f"\tHybrid detections: {t_rw} ({100 * acc_rw / len(targets)}% accuracy)")
+    print(
+        f"\tTotal detections with genes: {t_all} ({100 * (acc_r + acc_w + acc_rw) / (3 * len(targets))}% accuracy)")
+
+
+def detect(model, img):
+    res = model.detect([img], verbose=0)[0]
+    return res["masks"], res["rois"], res["class_ids"]
+
+
+############################################################
+#  Main
+############################################################
+if __name__ == '__main__':
+    import argparse
+
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description='Train Mask R-CNN to detect gene expression in cells.')
+    parser.add_argument("command",
+                        metavar="<command>",
+                        help="'train' (or 'detect' once implemented)")
+    parser.add_argument('--dataset', required=False,
+                        metavar="/path/to/cell/dataset/",
+                        help='Directory of the Cell dataset')
+    parser.add_argument('--weights', required=True,
+                        metavar="/path/to/weights.h5",
+                        help="Path to weights .h5 file or 'coco'")
+    parser.add_argument('--logs', required=False,
+                        default=DEFAULT_LOGS_DIR,
+                        metavar="/path/to/logs/",
+                        help='Logs and checkpoints directory (default=logs/)')
+    parser.add_argument('--image', required=False,
+                        metavar="path or URL to image",
+                        help='Image on which you detect cells')
+    parser.add_argument("--dir", required=False,
+                        metavar="/path/to/images/folder",
+                        help="The path to the folder containing images to analyze")
+    parser.add_argument('--input_channels', required=False,
+                        default="rgb",
+                        metavar="Channels of the input images",
+                        help="Specifies the channels of the images: 'rgb' for standard channels and 'genes' for gene specific channels.")
+    args = parser.parse_args()
+
+    # Validate arguments
+    if args.command == "train":
+        assert args.dataset, "Argument --dataset is required for training"
+    elif args.command == "detect":
+        assert args.image or args.dir, "Provide --image or --dir for the images to analyse"
+    assert args.input_channels in ["rgb", "genes"], "--input_channels must be either 'rgb' or 'genes'"
+    assert args.network in ["all", "RPN", "Heads"], "--network must be either 'all', 'RPN' or 'Heads'"
+
+    print("Weights: ", args.weights)
+    print("Dataset: ", args.dataset)
+    print("Logs: ", args.logs)
+
+    # Configurations
+    if args.command == "train":
+        if args.input_channels == "rgb":
+            config = CellConfig()
+        elif args.input_channels == "genes":
+            class GeneConfig(CellConfig):
+                IMAGE_CHANNEL_COUNT = 4
+                MEAN_PIXEL = np.array([123.7, 116.8, 103.9, 100.0])
+
+
+            config = GeneConfig()
+    else:
+        class InferenceConfig(CellConfig):
+            # Set batch size to 1 since we'll be running inference on
+            # one image at a time. Batch size = GPU_COUNT * IMAGES_PER_GPU
+            GPU_COUNT = 1
+            IMAGES_PER_GPU = 1
+
+
+        config = InferenceConfig()
+    config.display()
+
+    # Create model
+    if args.command == "train":
+        model = modellib.MaskRCNN(mode="training", config=config,
+                                  model_dir=args.logs)
+    else:
+        model = modellib.MaskRCNN(mode="inference", config=config,
+                                  model_dir=args.logs)
+
+    # Select weights file to load
+    if args.weights.lower() == "coco":
+        weights_path = COCO_WEIGHTS_PATH
+        # Download weights file
+        if not os.path.exists(weights_path):
+            utils.download_trained_weights(weights_path)
+    elif args.weights.lower() == "last":
+        # Find last trained weights
+        weights_path = model.find_last()
+    elif args.weights.lower() == "imagenet":
+        # Start from ImageNet trained weights
+        weights_path = model.get_imagenet_weights()
+    else:
+        weights_path = args.weights
+
+    # Load weights
+    print("Loading weights ", weights_path)
+    if args.weights.lower() == "coco":
+        # Exclude the last layers because they require a matching
+        # number of classes
+        model.load_weights(weights_path, by_name=True, exclude=[
+            "mrcnn_class_logits", "mrcnn_bbox_fc",
+            "mrcnn_bbox", "mrcnn_mask"])
+    else:
+        model.load_weights(weights_path, by_name=True)
+
+    # Load images and targets
+    if args.image:
+        images = [args.image]
+    else:
+        images, targets = find_images(args.dir)
+
+    # Train or evaluate
+    if args.command == "train":
+        train(model, args.input_channels)
+    elif args.command == "detect":
+        """
+        if args.dir:
+            count_instances(model, args.dir)
+        else:"""
+        detect(model=model, images_path=images, targets=targets)
+    else:
+        print(f"'{args.command}' is not recognized. \nUse 'train' (or 'detect' once implemented)".format(args.command))
